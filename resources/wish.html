@@ -64,21 +64,21 @@
     .grid {
       display: flex;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
     }
 
-    /* 百连：固定 10 列换行排布 */
+    /* 百连：固定 10 列换行排布（10 × 120 + 9 × 10 = 1290） */
     .grid.many {
       flex-wrap: wrap;
-      width: 1152px;
+      width: 1290px;
       align-content: flex-start;
     }
 
     .card {
       position: relative;
-      width: 108px;
-      height: 208px;
-      border-radius: 8px;
+      width: 120px;
+      height: 224px;
+      border-radius: 12px;
       overflow: hidden;
       background: linear-gradient(180deg, #2b3350 0%, #171d2e 100%);
       border: 1px solid rgba(255, 255, 255, .1);
@@ -87,95 +87,150 @@
     }
 
     .card .art {
-      flex: 1;
+      position: relative;
+      height: 130px;
+      flex: none;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(circle at 50% 34%, rgba(255, 255, 255, .14) 0%, rgba(255, 255, 255, 0) 68%);
+      background:
+        radial-gradient(circle at 50% 36%, rgba(255, 255, 255, .13) 0%, rgba(255, 255, 255, 0) 68%);
     }
     .card .art img {
-      width: 100%;
-      height: 100%;
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
       object-fit: cover;
       object-position: top center;
+      border: 2px solid rgba(255, 255, 255, .16);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .45);
     }
     .card .art .fallback {
-      font-size: 34px;
-      color: rgba(255, 255, 255, .5);
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, .08);
+      border: 2px solid rgba(255, 255, 255, .16);
+      font-size: 32px;
+      color: rgba(255, 255, 255, .55);
       font-weight: 500;
     }
 
+    /* 武器：图标本身就是完整图形，保持方形不裁圆 */
+    .card.weapon .art .fallback { border-radius: 18px; }
+
     .card .meta {
-      padding: 7px 4px 9px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6px 6px 11px;
       text-align: center;
-      background: linear-gradient(180deg, rgba(8, 12, 22, .35) 0%, rgba(8, 12, 22, .92) 46%);
+      background: linear-gradient(180deg, rgba(8, 12, 22, .18) 0%, rgba(8, 12, 22, .9) 42%);
     }
     .card .name {
-      font-size: 13px;
-      color: #e4eaf7;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #e9effb;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       letter-spacing: .2px;
     }
     .card .stars {
-      margin-top: 4px;
+      margin-top: 5px;
       font-size: 9px;
-      letter-spacing: 1px;
+      letter-spacing: 1.2px;
     }
 
     /* 三星 */
     .card.r3 { border-color: rgba(110, 160, 220, .34); }
     .card.r3 .stars { color: #7fb4e8; }
+    .card.r3 .art img { border-color: rgba(127, 180, 232, .5); }
 
     /* 四星 */
     .card.r4 {
       border-color: rgba(176, 132, 255, .55);
       background: linear-gradient(180deg, #3b2f67 0%, #1d1830 100%);
-      box-shadow: inset 0 0 22px rgba(154, 108, 255, .28);
+      box-shadow: 0 6px 18px rgba(120, 80, 220, .2);
     }
     .card.r4 .stars { color: #c9a0ff; }
+    .card.r4 .art img {
+      border-color: rgba(201, 160, 255, .7);
+      box-shadow: 0 0 18px rgba(154, 108, 255, .45);
+    }
 
     /* 五星 */
     .card.r5 {
-      border-color: rgba(255, 205, 112, .78);
+      border-color: rgba(255, 205, 112, .8);
       background: linear-gradient(180deg, #5c4420 0%, #2a1f10 100%);
-      box-shadow: inset 0 0 26px rgba(255, 196, 92, .34), 0 0 0 1px rgba(255, 222, 150, .2);
+      box-shadow: 0 0 0 1px rgba(255, 222, 150, .3), 0 10px 26px rgba(255, 178, 56, .28);
     }
     .card.r5 .stars { color: #ffd27a; }
-    .card.r5 .name { color: #ffe9be; font-size: 14px; letter-spacing: .4px; }
+    .card.r5 .name { color: #ffeec6; font-size: 15px; letter-spacing: .5px; }
+    .card.r5 .art img {
+      border-color: rgba(255, 210, 122, .9);
+      box-shadow: 0 0 24px rgba(255, 196, 92, .6);
+    }
+    .card.r5 .art::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 38%, rgba(255, 208, 122, .22) 0%, rgba(255, 208, 122, 0) 62%);
+      pointer-events: none;
+    }
+
+    /* 武器：图标本身是完整图形，不裁圆，保留方形（覆盖上面各星级的圆框） */
+    .card.weapon .art img {
+      width: 100px;
+      height: 100px;
+      border-radius: 0;
+      object-fit: contain;
+      border: none;
+      box-shadow: none;
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .5));
+    }
 
     .card .badge {
       position: absolute;
-      top: 6px;
-      left: 6px;
-      padding: 2px 7px;
-      font-size: 10px;
-      line-height: 1.5;
-      border-radius: 4px;
-      background: linear-gradient(135deg, #ffcf6b, #e8a33c);
+      top: 7px;
+      left: 7px;
+      padding: 2px 6px;
+      font-size: 9px;
+      line-height: 1.55;
+      border-radius: 3px;
+      background: linear-gradient(135deg, #ffd98a, #e8a33c);
       color: #3a2606;
-      letter-spacing: .5px;
+      letter-spacing: .6px;
+      box-shadow: 0 2px 8px rgba(232, 163, 60, .45);
+      z-index: 2;
     }
     .card .pitytag {
       position: absolute;
-      top: 6px;
-      right: 6px;
+      top: 7px;
+      right: 7px;
       padding: 2px 6px;
-      font-size: 10px;
-      line-height: 1.5;
-      border-radius: 4px;
-      background: rgba(6, 10, 18, .8);
+      font-size: 9px;
+      line-height: 1.55;
+      border-radius: 3px;
+      background: rgba(6, 10, 18, .82);
       border: 1px solid rgba(255, 214, 130, .5);
       color: #ffd88f;
+      z-index: 2;
     }
 
     /* 单抽放大 */
-    .grid.single .card { width: 200px; height: 330px; border-radius: 12px; }
-    .grid.single .card .name { font-size: 20px; }
-    .grid.single .card .stars { font-size: 15px; margin-top: 7px; }
-    .grid.single .card .meta { padding: 14px 8px 16px; }
+    .grid.single .card { width: 230px; height: 372px; border-radius: 16px; }
+    .grid.single .card .art { height: 226px; }
+    .grid.single .card .art img { width: 156px; height: 156px; border-width: 3px; }
+    .grid.single .card .art .fallback { width: 156px; height: 156px; font-size: 58px; }
+    .grid.single .card .name { font-size: 21px; }
+    .grid.single .card .stars { font-size: 15px; margin-top: 8px; }
+    .grid.single .card .meta { padding: 10px 10px 20px; }
     .grid.single .card .badge { font-size: 13px; padding: 3px 10px; }
     .grid.single .card .pitytag { font-size: 13px; padding: 3px 9px; }
 
@@ -217,7 +272,7 @@
 
     <div class="grid {{if items.length === 1}}single{{else if items.length > 10}}many{{/if}}">
       {{each items item}}
-      <div class="card r{{item.rank}}">
+      <div class="card r{{item.rank}}{{if !item.element}} weapon{{/if}}">
         <div class="art">
           {{if item.src}}
             <img src="{{item.src}}" alt="{{item.name}}" />

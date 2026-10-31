@@ -5,13 +5,13 @@
 
 | 抽卡结果 | 卡池一览 |
 | --- | --- |
-| ![抽卡结果](preview-wish.jpg) | ![卡池](preview-banner.jpg) |
+| ![抽卡结果](https://raw.githubusercontent.com/ll-cn/plugin-preview/main/gacha/preview-wish.jpg) | ![卡池](https://raw.githubusercontent.com/ll-cn/plugin-preview/main/gacha/preview-banner.jpg) |
 
-![记录 / 统计 / 欧皇榜](preview-record.jpg)
+![记录 / 统计 / 欧皇榜](https://raw.githubusercontent.com/ll-cn/plugin-preview/main/gacha/preview-record.jpg)
 
-![百连（一次 100 抽）](preview-hundred.jpg)
+![百连（一次 100 抽）](https://raw.githubusercontent.com/ll-cn/plugin-preview/main/gacha/preview-hundred.jpg)
 
-![帮助图](preview-help.jpg)
+![帮助图](https://raw.githubusercontent.com/ll-cn/plugin-preview/main/gacha/preview-help.jpg)
 
 ## 特性
 
