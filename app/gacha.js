@@ -41,7 +41,8 @@ export class genshinGacha extends plugin {
   /** 百连（需要在锅巴里打开「允许百连」） */
   async hundred(e) {
     loadConfig()
-    if (!CONFIG.hundredDraw) {
+    // 开关只管普通群友，机器人主人随时可以百连
+    if (!CONFIG.hundredDraw && !e.isMaster) {
       await e.reply(
         [
           '#抽卡百连 还没开启。',
@@ -67,7 +68,8 @@ export class genshinGacha extends plugin {
         .match(/^(抽卡百连|百连|抽卡|十连|单抽|抽一次|来一发|来十连)/)?.[1] || ''
     const { rest, poolId } = parseArgs(e.msg, word)
 
-    if (CONFIG.dailyLimit > 0) {
+    // 每日次数只限制普通群友，机器人主人不限（单抽 / 十连 / 百连都一样）
+    if (CONFIG.dailyLimit > 0 && !e.isMaster) {
       const p0 = getPlayer(e.group_id, e.user_id)
       const day = today()
       if (p0.daily.date !== day) {

@@ -39,7 +39,7 @@ export default [
   {
     field: 'dailyLimit',
     label: '每人每天抽卡次数',
-    helpMessage: '一次十连算 1 次，填 0 表示不限制',
+    helpMessage: '一次十连算 1 次，填 0 表示不限制；机器人主人不受此限制',
     component: 'InputNumber',
     componentProps: { min: 0, max: 100, step: 1, placeholder: '10' }
   },
@@ -68,7 +68,7 @@ export default [
   {
     field: 'hundredDraw',
     label: '允许百连',
-    helpMessage: '开启后才能用 #抽卡百连（一次 100 抽）',
+    helpMessage: '开启后群里才能用 #抽卡百连（一次 100 抽）；机器人主人不受此开关限制',
     bottomHelpMessage: '百连同样只算 1 次每日次数；出图有 10 行，比十连大很多',
     component: 'Switch'
   }
