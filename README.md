@@ -113,3 +113,6 @@ git clone https://github.com/ll-cn/gacha-plugin.git
 
 **必须整仓克隆**，只放 js 跑不起图（依赖 `resources/` 下的 html 模板）。
 装完重启机器人。
+
+> 如果你之前用的是内置抽卡的老版 DPS-plugin，请**先把 DPS-plugin 升到 v1.2.0**
+> （`#dps更新`），否则两个插件都会注册 `#抽卡`，抽卡记录会分成两份。
