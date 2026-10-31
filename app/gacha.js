@@ -21,8 +21,9 @@ export class genshinGacha extends plugin {
       event: 'message',
       priority: 10,
       rule: [
+        { reg: /^[#＃]?(抽卡)?百连/, fnc: 'hundred' },
         { reg: /^[#＃]?单抽(?!插件)/, fnc: 'one' },
-        { reg: /^[#＃]?(抽卡|十连|抽一次|来一发|来十连)(?!插件|帮助|说明|help)/, fnc: 'ten' }
+        { reg: /^[#＃]?(抽卡|十连|抽一次|来一发|来十连)(?!插件|帮助|说明|help|百连)/, fnc: 'ten' }
       ]
     })
   }
@@ -37,13 +38,33 @@ export class genshinGacha extends plugin {
     return this.draw(e, 10)
   }
 
+  /** 百连（需要在锅巴里打开「允许百连」） */
+  async hundred(e) {
+    loadConfig()
+    if (!CONFIG.hundredDraw) {
+      await e.reply(
+        [
+          '#抽卡百连 还没开启。',
+          '',
+          '主人在锅巴面板 → 抽卡插件 → 模拟抽卡 → 打开「允许百连」即可；',
+          '也可以直接改 config/config.yaml 里的 hundredDraw: true'
+        ].join('\n')
+      )
+      return true
+    }
+    return this.draw(e, 100)
+  }
+
   /**
    * 抽卡主流程：校验限次 → 抽 → 落库 → 出图。
    * 触发词命中后再从消息里解析池子（武器 / 常驻 / 池2），没写就默认角色池。
    */
   async draw(e, count) {
     loadConfig()
-    const word = String(e.msg || '').replace(/^[#＃]?/, '').match(/^(抽卡|十连|单抽|抽一次|来一发|来十连)/)?.[1] || ''
+    const word =
+      String(e.msg || '')
+        .replace(/^[#＃]?/, '')
+        .match(/^(抽卡百连|百连|抽卡|十连|单抽|抽一次|来一发|来十连)/)?.[1] || ''
     const { rest, poolId } = parseArgs(e.msg, word)
 
     if (CONFIG.dailyLimit > 0) {
@@ -112,6 +133,7 @@ export class genshinGacha extends plugin {
     const ctx = {
       head: poolLabel(poolId, banner),
       title: POOLS[poolId]?.label || '',
+      drawLabel: count >= 100 ? '100 连' : count === 1 ? '单抽' : '抽卡',
       upText: upNames(poolId, banner),
       rangeText: rangeText(banner),
       pity: CONFIG.pityTip ? pityText(poolId, state) : '',

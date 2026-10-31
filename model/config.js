@@ -14,7 +14,8 @@ const DEFAULTS = {
   dailyLimit: 10,
   refreshMinutes: 360,
   pityTip: true,
-  recallNoGold: 8
+  recallNoGold: 8,
+  hundredDraw: false
 }
 
 /** 配置文件缺失/为空时写回的默认内容 */
@@ -50,6 +51,9 @@ pityTip: true
 
 # 没出五星（金）时，抽卡结果自动撤回（秒；0 = 不撤回，最高 120）
 recallNoGold: 8
+
+# 是否开放 #抽卡百连（一次 100 抽，出图会很大，默认关闭）
+hundredDraw: false
 `
 
 export const CONFIG = { ...DEFAULTS }
@@ -180,6 +184,7 @@ export function loadConfig(force = false) {
   CONFIG.refreshMinutes = zeroNum(raw.refreshMinutes, DEFAULTS.refreshMinutes)
   CONFIG.pityTip = raw.pityTip !== false && raw.pityTip !== 'false'
   CONFIG.recallNoGold = Math.min(120, zeroNum(raw.recallNoGold, DEFAULTS.recallNoGold))
+  CONFIG.hundredDraw = raw.hundredDraw === true || raw.hundredDraw === 'true'
 }
 
 /** 是否强制纯文字输出（config.yaml 的 textOnly 开关，默认关） */

@@ -9,7 +9,7 @@ const NUM_FIELDS = {
   jpegQuality: [30, 100, 90]
 }
 
-const BOOL_FIELDS = ['textOnly', 'pityTip']
+const BOOL_FIELDS = ['textOnly', 'pityTip', 'hundredDraw']
 
 function toNum(v, min, max, def) {
   const n = Number(v)
@@ -28,7 +28,8 @@ export async function getConfigData() {
     dailyLimit: CONFIG.dailyLimit,
     refreshMinutes: CONFIG.refreshMinutes,
     pityTip: CONFIG.pityTip,
-    recallNoGold: CONFIG.recallNoGold
+    recallNoGold: CONFIG.recallNoGold,
+    hundredDraw: CONFIG.hundredDraw
   }
 }
 

@@ -67,6 +67,13 @@
       gap: 8px;
     }
 
+    /* 百连：固定 10 列换行排布 */
+    .grid.many {
+      flex-wrap: wrap;
+      width: 1152px;
+      align-content: flex-start;
+    }
+
     .card {
       position: relative;
       width: 108px;
@@ -196,7 +203,7 @@
   <div id="container">
     <div class="head">
       <div class="left">
-        <div class="title"><span class="pool">{{poolLabel}}</span> · 抽卡</div>
+        <div class="title"><span class="pool">{{poolLabel}}</span> · {{drawLabel || '抽卡'}}</div>
         <div class="sub">
           {{if upText}}UP：<span class="hl">{{upText}}</span>{{/if}}
           {{if rangeText}}<span class="hl"> ｜ </span>{{rangeText}}{{/if}}
@@ -208,7 +215,7 @@
       </div>
     </div>
 
-    <div class="grid {{if items.length === 1}}single{{/if}}">
+    <div class="grid {{if items.length === 1}}single{{else if items.length > 10}}many{{/if}}">
       {{each items item}}
       <div class="card r{{item.rank}}">
         <div class="art">

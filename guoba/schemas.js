@@ -64,5 +64,12 @@ export default [
     bottomHelpMessage: '出了五星就保留不撤。撤回需要机器人是群管理员，否则只记日志',
     component: 'InputNumber',
     componentProps: { min: 0, max: 120, step: 1, placeholder: '8' }
+  },
+  {
+    field: 'hundredDraw',
+    label: '允许百连',
+    helpMessage: '开启后才能用 #抽卡百连（一次 100 抽）',
+    bottomHelpMessage: '百连同样只算 1 次每日次数；出图有 10 行，比十连大很多',
+    component: 'Switch'
   }
 ]

@@ -70,16 +70,34 @@ export function pityText(poolId, state) {
 /** 抽卡结果的纯文本版（出图失败或 textOnly 时用） */
 export function textResult(items, ctx) {
   const lines = [`🎴 ${ctx.head} · ${items.length === 1 ? '单抽' : `${items.length} 连`}`, SPLIT]
-  for (const item of items) {
-    const star = '★'.repeat(item.rank)
-    if (item.rank >= 4) {
+
+  // 百连这种超长列表只逐条列四星以上，三星折成一行数量
+  if (items.length > 20) {
+    for (const item of items.filter(i => i.rank >= 4)) {
       const tag = item.isUp ? ' (UP)' : ''
       const el = item.element ? ` ${item.element}` : ''
-      lines.push(`${star} ${item.name}${el}${tag}${item.rank === 5 ? ` · 第 ${item.pity} 抽` : ''}`)
-    } else {
-      lines.push(`${star} ${item.name}`)
+      lines.push(`${'★'.repeat(item.rank)} ${item.name}${el}${tag}${item.rank === 5 ? ` · 第 ${item.pity} 抽` : ''}`)
+    }
+    const r3 = items.filter(i => i.rank < 4)
+    if (r3.length) {
+      const cnt = {}
+      for (const i of r3) cnt[i.name] = (cnt[i.name] || 0) + 1
+      const names = Object.entries(cnt).map(([n, c]) => (c > 1 ? `${n}×${c}` : n))
+      lines.push(`★★★ 三星 ${r3.length} 件：${names.join('、')}`)
+    }
+  } else {
+    for (const item of items) {
+      const star = '★'.repeat(item.rank)
+      if (item.rank >= 4) {
+        const tag = item.isUp ? ' (UP)' : ''
+        const el = item.element ? ` ${item.element}` : ''
+        lines.push(`${star} ${item.name}${el}${tag}${item.rank === 5 ? ` · 第 ${item.pity} 抽` : ''}`)
+      } else {
+        lines.push(`${star} ${item.name}`)
+      }
     }
   }
+
   lines.push(SPLIT)
   if (ctx.pity) lines.push(ctx.pity)
   if (ctx.hint) lines.push(ctx.hint)
@@ -92,6 +110,7 @@ export async function buildCardData(items, ctx) {
   return {
     title: ctx.title,
     poolLabel: ctx.head,
+    drawLabel: ctx.drawLabel || '',
     upText: ctx.upText,
     rangeText: ctx.rangeText,
     pity: ctx.pity,
