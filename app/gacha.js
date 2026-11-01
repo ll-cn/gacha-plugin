@@ -23,7 +23,7 @@ export class genshinGacha extends plugin {
       rule: [
         { reg: /^[#＃]?(抽卡)?百连/, fnc: 'hundred' },
         { reg: /^[#＃]?单抽(?!插件)/, fnc: 'one' },
-        { reg: /^[#＃]?(抽卡|十连|抽一次|来一发|来十连)(?!插件|帮助|说明|help|百连)/, fnc: 'ten' }
+        { reg: /^[#＃]?(抽卡|十连|抽一次|来一发|来十连)(?!插件|帮助|说明|help|百连|记录|历史|统计)/, fnc: 'ten' }
       ]
     })
   }

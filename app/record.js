@@ -32,10 +32,10 @@ export class genshinGachaRecord extends plugin {
       name: PLUGIN_NAME,
       dsc: '模拟抽卡的抽卡记录、出金统计与群内排行',
       event: 'message',
-      priority: 10,
+      priority: 8,
       rule: [
-        { reg: /^[#＃]?模拟抽卡统计/, fnc: 'stat' },
-        { reg: /^[#＃]?模拟抽卡(记录|历史)/, fnc: 'record' },
+        { reg: /^[#＃]?(模拟)?抽卡统计/, fnc: 'stat' },
+        { reg: /^[#＃]?(模拟)?抽卡(记录|历史)/, fnc: 'record' },
         { reg: /^[#＃]?欧皇榜/, fnc: 'rank' }
       ]
     })
