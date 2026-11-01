@@ -4,7 +4,7 @@ import { TPL_HELP, renderTo, renderFailBrief } from '../model/render.js'
 import { sendImage } from '../model/send.js'
 import { PLUGIN_NAME, versionLine } from '../model/version.js'
 
-/** 抽卡帮助（priority 5，排在抽卡本体前面，否则 #抽卡帮助 会被当成抽卡） */
+/** 抽卡帮助（priority 5，排在抽卡本体前面，否则 #模拟抽卡帮助 会被当成抽卡） */
 export class gachaHelp extends plugin {
   constructor() {
     super({
@@ -12,7 +12,7 @@ export class gachaHelp extends plugin {
       dsc: '抽卡插件的帮助（图片版）',
       event: 'message',
       priority: 5,
-      rule: [{ reg: /^[#＃/／]?\s*抽卡(插件)?(帮助|说明|help)(?=$|[\s])/i, fnc: 'help' }]
+      rule: [{ reg: /^[#＃/／]?\s*(模拟)?抽卡(插件)?(帮助|说明|help)(?=$|[\s])/i, fnc: 'help' }]
     })
   }
 
