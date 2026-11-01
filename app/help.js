@@ -12,7 +12,7 @@ export class gachaHelp extends plugin {
       dsc: '抽卡插件的帮助（图片版）',
       event: 'message',
       priority: 5,
-      rule: [{ reg: /^[#＃/／]?\s*(模拟)?抽卡(插件)?(帮助|说明|help)(?=$|[\s])/i, fnc: 'help' }]
+      rule: [{ reg: /^[#＃/／]?\s*(模拟抽卡|抽卡插件)(帮助|说明|help)(?=$|[\s])/i, fnc: 'help' }]
     })
   }
 
@@ -54,7 +54,7 @@ export class gachaHelp extends plugin {
           name: '记录与统计',
           cls: 'record',
           items: [
-            { icon: '📜', cmd: '#模拟抽卡记录', desc: '抽卡记录，可带页码翻页（#抽卡记录 同效）' },
+            { icon: '📜', cmd: '#模拟抽卡记录', desc: '抽卡记录，可带页码翻页' },
             { icon: '✨', cmd: '#模拟抽卡记录五星', desc: '只看五星' },
             { icon: '📊', cmd: '#模拟抽卡统计', desc: '出金率 / 平均抽数 / 各池垫抽' },
             { icon: '🏆', cmd: '#欧皇榜', desc: '群内平均出金排行（满 20 抽）' }
@@ -94,7 +94,7 @@ export class gachaHelp extends plugin {
       '#抽卡百连                    一次 100 抽（主人开启后可用）',
       '#卡池更新                    同步卡池（主人 / 群管）',
       '━━━━━━━━━━━━━━',
-      '#模拟抽卡记录 [五星|页码]    抽卡记录（#抽卡记录 同效）',
+      '#模拟抽卡记录 [五星|页码]    抽卡记录',
       '#模拟抽卡统计                出金率与各池垫抽',
       '#欧皇榜                      群内出金排行',
       '━━━━━━━━━━━━━━',

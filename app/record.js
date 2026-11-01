@@ -34,8 +34,8 @@ export class genshinGachaRecord extends plugin {
       event: 'message',
       priority: 8,
       rule: [
-        { reg: /^[#＃]?(模拟)?抽卡统计/, fnc: 'stat' },
-        { reg: /^[#＃]?(模拟)?抽卡(记录|历史)/, fnc: 'record' },
+        { reg: /^[#＃]?模拟抽卡统计/, fnc: 'stat' },
+        { reg: /^[#＃]?模拟抽卡(记录|历史)/, fnc: 'record' },
         { reg: /^[#＃]?欧皇榜/, fnc: 'rank' }
       ]
     })
