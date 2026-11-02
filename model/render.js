@@ -141,6 +141,9 @@ export function registerRenderTarget(label, fn) {
  *  ③ loader.getRenderer() —— 指定了 renderer.yaml 的 name 时，直接问那个后端
  */
 async function loadRenderTargets() {
+  // 已注册外部后端（非云崽环境，如 alemon）时不必再探测云崽入口，省掉两条无用的告警
+  if (externalTargets.length) return [...externalTargets]
+
   const targets = []
   const seen = new Set()
   const add = (label, target, key) => {
