@@ -143,7 +143,7 @@ git clone https://github.com/ll-cn/gacha-plugin.git
 | 分支 | 用途 |
 | --- | --- |
 | `main` | 开发主线（云崽 `git clone` 到 `plugins/` 用这个） |
-| `release` | 与 `main` 同步，**生态市场与 `git clone` 用这个** |
+| `release` | 只含 ALemonJS 运行所需（`package.json` + `lib/` + `app/` + `model/` + `resources/`），**生态市场与 `git clone` 用这个** |
 
 > ⚠️ **只 clone 到 `packages/` 不会生效**。ALemonJS 按 `alemon.config.yaml` 的 `apps` 用
 > `require.resolve` 加载插件，不会扫描 `packages/` 目录 —— 下载之后还要「链接 + 注册」。
