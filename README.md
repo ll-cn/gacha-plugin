@@ -22,6 +22,7 @@
 - 📜 **记录与统计**：出金率、平均抽数、歪率、各池垫抽、群内欧皇榜
 - 🖼 **图片渲染**：卡片、卡池一览、记录、统计、帮助都是图
 - 🖥 **支持锅巴面板**：装了 Guoba-Plugin 可在网页改配置，保存即生效
+- 🤖 **云崽 / ALemonJS 双端**：同一份代码两套入口，alemonjs 装进 `packages/` 也能跑
 - ⏱ **没出金自动撤回**：抽卡结果没有五星时过几秒自动撤，出金保留
 
 ## 指令
@@ -136,21 +137,38 @@ git clone https://github.com/ll-cn/gacha-plugin.git
 
 ### ALemonJS
 
-同一个仓库，`main` 分支同时是云崽插件和 alemonjs 插件 —— 区别只在入口：
+同一个仓库，云崽和 alemonjs 两套入口并存，互不干扰 —— 区别只在入口：
 云崽读 `index.js`，alemonjs 读 `package.json` 的 `main`（`lib/index.js`）。
 
+| 分支 | 用途 |
+| --- | --- |
+| `main` | 开发主线（云崽 `git clone` 到 `plugins/` 用这个） |
+| `release` | 与 `main` 同步，**生态市场与 `git clone` 用这个** |
+
+> ⚠️ **只 clone 到 `packages/` 不会生效**。ALemonJS 按 `alemon.config.yaml` 的 `apps` 用
+> `require.resolve` 加载插件，不会扫描 `packages/` 目录 —— 下载之后还要「链接 + 注册」。
+
 ```bash
-# 在 alemon 项目根目录
+# 1) 下载到宿主项目的 packages/
 git clone -b release --depth=1 https://github.com/ll-cn/gacha-plugin.git ./packages/gacha-plugin
-yarn install            # 装 art-template / sharp
+
+# 2) 链接进 node_modules，同时装上运行期依赖（art-template / sharp）
+npm i ./packages/gacha-plugin
+#   yarn: yarn add file:./packages/gacha-plugin
+#   pnpm: pnpm add ./packages/gacha-plugin
+#   宿主 package.json 里有 "workspaces": ["packages/*"] 的话，直接 install 也会自动建软链
+
+# 3) 注册到 apps —— 手动编辑 alemon.config.yaml
+#    apps:
+#      gacha-plugin: true
+
+# 4) 重启机器人
 ```
 
-然后在 `alemon.config.yaml` 的 `apps` 里加一行（ALemonX 安装时会自动加）：
+> ⚠️ **别用 `alemonc add apps gacha-plugin`**。那个命令会把 `apps` 从对象
+> （`插件名: true`）**强转成数组**，把已有的 `alemonjs-cheese`、`alemonjs-load-yunzai` 一起清空。
+> 手动加一行，或者用 `alemonc set apps.gacha-plugin true`。
 
-```yaml
-apps:
-  gacha-plugin: true
-```
-
-出图用**系统自带的 Chrome / Edge 无头截图**，不需要 puppeteer。机器上没有浏览器时会自动降级成文字。
+出图用**系统自带的 Chrome / Edge 无头截图**，不需要 puppeteer（也没有 jsxp 那类额外依赖）。
+机器上没装浏览器时会自动降级成文字，不会报错。
 配置文件仍是 `packages/gacha-plugin/config/config.yaml`，首次启动自动生成，改完即时生效。
