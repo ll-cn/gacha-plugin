@@ -53,6 +53,7 @@ export function renderFailMsg() {
 export function renderFailBrief() {
   const miss = missingTplList()
   if (miss.length) return `图片渲染失败：缺模板 ${miss.join('、')}，请克隆整个仓库`
+  if (externalTargets.length) return '图片渲染失败：没找到 Chrome/Chromium，装一个或用环境变量 GACHA_CHROME 指定（详见日志）'
   return '图片渲染失败：Chromium / puppeteer 不可用，详见机器人日志'
 }
 
