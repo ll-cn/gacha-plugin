@@ -1,4 +1,4 @@
-import plugin from '../../../lib/plugins/plugin.js'
+import plugin from '../model/plugin-base.js'
 import { loadConfig, needTextOnly } from '../model/config.js'
 import { POOLS } from '../model/wish/banner.js'
 import { groupPlayers, getPlayer } from '../model/wish/store.js'

@@ -1,4 +1,4 @@
-import plugin from '../../../lib/plugins/plugin.js'
+import plugin from '../model/plugin-base.js'
 import fs from 'node:fs'
 import path from 'node:path'
 import { execFile } from 'node:child_process'

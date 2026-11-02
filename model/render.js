@@ -125,6 +125,15 @@ function toImage(img) {
   return img
 }
 
+/** 外部渲染后端（非云崽环境，如 alemon 由启动时注册） */
+const externalTargets = []
+
+/** 注册一个外部渲染后端：fn(name, payload) => 图片 Buffer / 路径 */
+export function registerRenderTarget(label, fn) {
+  if (typeof fn !== 'function') return
+  externalTargets.push({ label, call: fn })
+}
+
 /**
  * 收集可用的渲染入口。不同分支/版本的云崽入口不一样，逐个试：
  *  ① lib/puppeteer/puppeteer.js —— 生态通用入口
@@ -162,7 +171,7 @@ async function loadRenderTargets() {
     log('warn', `渲染器加载失败：${err?.message ?? err}`)
   }
 
-  return targets
+  return [...targets, ...externalTargets]
 }
 
 export async function renderTo(tplFile, name, data) {

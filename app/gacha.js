@@ -1,4 +1,4 @@
-import plugin from '../../../lib/plugins/plugin.js'
+import plugin from '../model/plugin-base.js'
 import { CONFIG, loadConfig, needTextOnly } from '../model/config.js'
 import { ensureFresh, getPool, POOLS, rangeText } from '../model/wish/banner.js'
 import { POOL_INIT, isWeaponPool, rollMany, upNames } from '../model/wish/gacha.js'

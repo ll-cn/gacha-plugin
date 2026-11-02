@@ -1,4 +1,4 @@
-import plugin from '../../../lib/plugins/plugin.js'
+import plugin from '../model/plugin-base.js'
 import { CONFIG, loadConfig, needTextOnly } from '../model/config.js'
 import { TPL_HELP, renderTo, renderFailBrief } from '../model/render.js'
 import { sendImage } from '../model/send.js'

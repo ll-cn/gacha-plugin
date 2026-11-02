@@ -1,4 +1,4 @@
-import plugin from '../../../lib/plugins/plugin.js'
+import plugin from '../model/plugin-base.js'
 import { bannerInfo, currentBanners, ensureFresh, getPool, leftText, POOLS, rangeText, refreshBanners } from '../model/wish/banner.js'
 import { POOL_INIT } from '../model/wish/gacha.js'
 import { getPlayer, poolState, touch } from '../model/wish/store.js'

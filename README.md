@@ -124,6 +124,8 @@ hundredDraw: false  # 是否开放 #抽卡百连（一次 100 抽），默认关
 
 ## 安装
 
+### Yunzai / TRSS-Yunzai
+
 ```bash
 cd plugins
 git clone https://github.com/ll-cn/gacha-plugin.git
@@ -131,3 +133,24 @@ git clone https://github.com/ll-cn/gacha-plugin.git
 
 **必须整仓克隆**，只放 js 跑不起图（依赖 `resources/` 下的 html 模板）。
 装完重启机器人。
+
+### ALemonJS
+
+同一个仓库，`main` 分支同时是云崽插件和 alemonjs 插件 —— 区别只在入口：
+云崽读 `index.js`，alemonjs 读 `package.json` 的 `main`（`lib/index.js`）。
+
+```bash
+# 在 alemon 项目根目录
+git clone -b release --depth=1 https://github.com/ll-cn/gacha-plugin.git ./packages/gacha-plugin
+yarn install            # 装 art-template / sharp
+```
+
+然后在 `alemon.config.yaml` 的 `apps` 里加一行（ALemonX 安装时会自动加）：
+
+```yaml
+apps:
+  gacha-plugin: true
+```
+
+出图用**系统自带的 Chrome / Edge 无头截图**，不需要 puppeteer。机器上没有浏览器时会自动降级成文字。
+配置文件仍是 `packages/gacha-plugin/config/config.yaml`，首次启动自动生成，改完即时生效。
