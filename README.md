@@ -169,6 +169,18 @@ npm i ./packages/gacha-plugin
 > （`插件名: true`）**强转成数组**，把已有的 `alemonjs-cheese`、`alemonjs-load-yunzai` 一起清空。
 > 手动加一行，或者用 `alemonc set apps.gacha-plugin true`。
 
-出图用**系统自带的 Chrome / Edge 无头截图**，不需要 puppeteer（也没有 jsxp 那类额外依赖）。
-机器上没装浏览器时会自动降级成文字，不会报错。
+**出图方式**（按顺序自动选，不用配）：
+
+1. **shotium**（`@pixel.js/shotium`，和云崽同一个渲染内核）—— 进程内渲染，**不需要安装浏览器**，
+   服务器/容器里最稳。`npm i` 时会作为可选依赖自动装对应平台的原生包（linux-x64 / linux-arm64 / win32 …）
+2. 系统 Chrome / Chromium / Edge 无头截图（找不到 shotium 时兜底）
+3. 两者都没有 → 自动降级成纯文字，不会报错
+
+日志里会写实际用的方式：
+
+```
+[抽卡插件] 出图方式：shotium 进程内渲染（不需要浏览器）
+[抽卡插件] 出图浏览器：/usr/bin/chromium
+```
+
 配置文件仍是 `packages/gacha-plugin/config/config.yaml`，首次启动自动生成，改完即时生效。
