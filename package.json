@@ -1,6 +1,6 @@
 {
   "name": "gacha-plugin",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "原神模拟抽卡（ALemonJS 版）：角色/武器/常驻池，保底定轨、抽卡记录与欧皇榜",
   "author": "ll-cn",
   "license": "MIT",
