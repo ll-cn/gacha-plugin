@@ -1,5 +1,6 @@
 import { POOLS } from './banner.js'
 import { iconMap } from './icon.js'
+import { faceOf, weaponIconOf } from './miao.js'
 
 export const SPLIT = '━━━━━━━━━━━━━━'
 
@@ -104,9 +105,20 @@ export function textResult(items, ctx) {
   return lines.join('\n')
 }
 
+/** 本地图库里的图（角色头像 / 武器图标），没有返回空串 */
+function localPic(item) {
+  return item.element ? faceOf(item.name) : weaponIconOf(item.name)
+}
+
+/** 本地取不到的才联网补图标，返回 { icon: src } */
+async function remoteIcons(items) {
+  const missing = items.filter(i => !localPic(i)).map(i => i.icon)
+  return missing.length ? iconMap(missing) : {}
+}
+
 /** 抽卡结果转卡片数据（图标先落地成 file:// 再交给模板） */
 export async function buildCardData(items, ctx) {
-  const icons = await iconMap(items.map(i => i.icon))
+  const icons = await remoteIcons(items)
   return {
     title: ctx.title,
     poolLabel: ctx.head,
@@ -114,29 +126,40 @@ export async function buildCardData(items, ctx) {
     upText: ctx.upText,
     rangeText: ctx.rangeText,
     pity: ctx.pity,
-    items: items.map(i => ({
-      name: i.name,
-      rank: i.rank,
-      isUp: !!i.isUp,
-      element: i.element || '',
-      type: i.type || '',
-      star: '★'.repeat(i.rank),
-      pity: i.rank === 5 ? i.pity : 0,
-      src: icons[i.icon] || ''
-    }))
+    items: items.map(i => {
+      const local = localPic(i)
+      return {
+        name: i.name,
+        rank: i.rank,
+        isUp: !!i.isUp,
+        element: i.element || '',
+        type: i.type || '',
+        star: '★'.repeat(i.rank),
+        pity: i.rank === 5 ? i.pity : 0,
+        src: local || icons[i.icon] || '',
+        local: Boolean(local)
+      }
+    })
   }
+}
+
+/** 卡池一览里每个池子要展示的名单：常驻只列五星，其余按 5★ + 4★ 排 */
+function bannerUps(b) {
+  if (b.pool === 'standard') return b.up5 || []
+  if (b.pool === 'weapon') return [...(b.up5Weapon || []), ...(b.up4Weapon || [])]
+  return [...(b.up5 || []), ...(b.up4 || [])]
 }
 
 /** 卡池一览卡片数据 */
 export async function buildBannerData(list, info, leftText, rangeText) {
-  const upList = list.flatMap(b => (b.pool === 'weapon' ? b.up5Weapon : b.up5) || [])
-  const icons = await iconMap(upList.map(x => x.icon))
+  const upList = list.flatMap(b => bannerUps(b))
+  const icons = await remoteIcons(upList)
 
   return {
     version: info.version || '',
     updatedText: info.updated ? `更新于 ${fullTime(info.updated)}` : '尚未同步',
     pools: list.map(b => {
-      const upRaw = (b.pool === 'weapon' ? b.up5Weapon : b.up5) || []
+      const upRaw = bannerUps(b)
       const limit = b.pool === 'standard' ? 3 : 4
       return {
         cls: b.pool === 'weapon' ? 'weapon' : b.pool === 'standard' ? 'standard' : '',
@@ -146,12 +169,16 @@ export async function buildBannerData(list, info, leftText, rangeText) {
         leftText: b.permanent ? '长期开放' : leftText(b),
         timeText: b.permanent ? '常驻角色与武器均可获取，无 UP' : `${rangeText(b)}（${leftText(b)}）`,
         more: Math.max(0, upRaw.length - limit),
-        items: upRaw.slice(0, limit).map(x => ({
-          name: x.name,
-          rank: x.rank || 5,
-          element: x.element || x.type || '',
-          src: icons[x.icon] || ''
-        }))
+        items: upRaw.slice(0, limit).map(x => {
+          const local = localPic(x)
+          return {
+            name: x.name,
+            rank: x.rank || 5,
+            element: x.element || x.type || '',
+            src: local || icons[x.icon] || '',
+            local: Boolean(local)
+          }
+        })
       }
     })
   }

@@ -81,7 +81,8 @@ export async function refreshMeta() {
     for (const v of Object.values(data?.data?.items || {})) {
       if (!v?.name || !v?.icon) continue
       const old = next.characters[v.name]
-      if (old && (old.rank || 0) >= (v.rank || 0)) continue
+      // 已有且信息完整就跳过；缺点图标的要补上
+      if (old && old.icon && (old.rank || 0) >= (v.rank || 0)) continue
       if (!old) addedChar += 1
       next.characters[v.name] = {
         id: v.id,
