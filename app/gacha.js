@@ -43,14 +43,7 @@ export class genshinGacha extends plugin {
     loadConfig()
     // 开关只管普通群友，机器人主人随时可以百连
     if (!CONFIG.hundredDraw && !e.isMaster) {
-      await e.reply(
-        [
-          '#抽卡百连 还没开启。',
-          '',
-          '主人在锅巴面板 → 抽卡插件 → 模拟抽卡 → 打开「允许百连」即可；',
-          '也可以直接改 config/config.yaml 里的 hundredDraw: true'
-        ].join('\n')
-      )
+      await e.reply('#抽卡百连 还没开启。')
       return true
     }
     return this.draw(e, 100)
