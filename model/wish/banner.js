@@ -135,10 +135,10 @@ function parseAnnouncement(ann, content) {
     name,
     startTs,
     endTs,
-    up5: chars[5].map(c => findChar(c.name, c.element)),
-    up4: chars[4].map(c => findChar(c.name, c.element)),
-    up5Weapon: weapons[5].map(w => findWeapon(w.name, '')),
-    up4Weapon: weapons[4].map(w => findWeapon(w.name, '')),
+    up5: chars[5].map(c => ({ ...findChar(c.name, c.element), rank: 5 })),
+    up4: chars[4].map(c => ({ ...findChar(c.name, c.element), rank: 4 })),
+    up5Weapon: weapons[5].map(w => ({ ...findWeapon(w.name, ''), rank: 5 })),
+    up4Weapon: weapons[4].map(w => ({ ...findWeapon(w.name, ''), rank: 4 })),
     source: 'announcement'
   }
 
