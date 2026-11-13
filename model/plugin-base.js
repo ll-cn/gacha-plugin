@@ -18,3 +18,6 @@ try {
 }
 
 export default base
+
+/** 是否真的跑在云崽里（否则就是 alemonjs 等其它宿主） */
+export const IS_YUNZAI = base !== PluginShell
