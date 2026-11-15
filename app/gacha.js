@@ -154,10 +154,7 @@ export class genshinGacha extends plugin {
     for (let i = 0; i < items.length; i += size) {
       const part = items.slice(i, i + size)
       const pageCtx = pageCount > 1 ? { ...ctx, drawLabel: `百连 ${i / size + 1}/${pageCount}` } : ctx
-      const data = await buildCardData(part, pageCtx)
-      // 百连一次要发十张，单张压一点，整条消息不至于过大
-      if (pageCount > 1) data.quality = Math.min(CONFIG.jpegQuality, 80)
-      const one = await renderTo(TPL_WISH, `gw-wish-${i / size + 1}`, data)
+      const one = await renderTo(TPL_WISH, `gw-wish-${i / size + 1}`, await buildCardData(part, pageCtx))
       if (!one) {
         pages.length = 0
         break
