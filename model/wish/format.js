@@ -1,8 +1,19 @@
 import { POOLS } from './banner.js'
 import { iconMap } from './icon.js'
-import { faceOf, weaponIconOf } from './miao.js'
+import { faceOf, gachaArtOf, splashOf, weaponIconOf } from './miao.js'
 
 export const SPLIT = '━━━━━━━━━━━━━━'
+
+/** 元素配色（结果卡底部的小圆点） */
+const ELEMENT_COLOR = {
+  火: '#ff7a52',
+  水: '#4fc3f7',
+  风: '#63d6b0',
+  雷: '#b98cff',
+  草: '#8fd14f',
+  冰: '#8fe3ff',
+  岩: '#f0b03c'
+}
 
 /** 指令里认的池子写法 → 池 id */
 const POOL_WORDS = [
@@ -110,15 +121,45 @@ function localPic(item) {
   return item.element ? faceOf(item.name) : weaponIconOf(item.name)
 }
 
+/** 抽卡结果卡用的图：角色用竖版立绘，武器用图标 */
+function cardPic(item) {
+  if (!item.element) return weaponIconOf(item.name)
+  return gachaArtOf(item.name) || faceOf(item.name)
+}
+
 /** 本地取不到的才联网补图标，返回 { icon: src } */
-async function remoteIcons(items) {
-  const missing = items.filter(i => !localPic(i)).map(i => i.icon)
+async function remoteIcons(items, pick = localPic) {
+  const missing = items.filter(i => !pick(i)).map(i => i.icon)
   return missing.length ? iconMap(missing) : {}
 }
 
 /** 抽卡结果转卡片数据（图标先落地成 file:// 再交给模板） */
 export async function buildCardData(items, ctx) {
-  const icons = await remoteIcons(items)
+  const icons = await remoteIcons(items, cardPic)
+  const cards = items.map(i => {
+    const local = cardPic(i)
+    return {
+      name: i.name,
+      rank: i.rank,
+      isUp: !!i.isUp,
+      element: i.element || '',
+      elColor: ELEMENT_COLOR[i.element] || '',
+      type: i.type || '',
+      star: '★'.repeat(i.rank),
+      pity: i.rank === 5 ? i.pity : 0,
+      src: local || icons[i.icon] || '',
+      splash: i.element ? splashOf(i.name) : '',
+      local: Boolean(local)
+    }
+  })
+
+  // 每十连一行，行内的五星跟在行后单独登场
+  const rows = []
+  for (let i = 0; i < cards.length; i += 10) {
+    const items = cards.slice(i, i + 10)
+    rows.push({ items, splash: items.find(c => c.rank === 5 && c.splash) || null })
+  }
+
   return {
     title: ctx.title,
     poolLabel: ctx.head,
@@ -126,20 +167,11 @@ export async function buildCardData(items, ctx) {
     upText: ctx.upText,
     rangeText: ctx.rangeText,
     pity: ctx.pity,
-    items: items.map(i => {
-      const local = localPic(i)
-      return {
-        name: i.name,
-        rank: i.rank,
-        isUp: !!i.isUp,
-        element: i.element || '',
-        type: i.type || '',
-        star: '★'.repeat(i.rank),
-        pity: i.rank === 5 ? i.pity : 0,
-        src: local || icons[i.icon] || '',
-        local: Boolean(local)
-      }
-    })
+    uid: ctx.uid || '',
+    total: cards.length,
+    rows,
+    single: cards.length === 1 ? cards[0] : null,
+    items: cards
   }
 }
 

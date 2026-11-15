@@ -58,17 +58,19 @@ function charDir() {
 }
 
 const faces = new Map()
+const gachaArts = new Map()
+const splashes = new Map()
 
-/** 本地角色头像（file:// 地址），找不到返回空串 */
-export function faceOf(name) {
+/** 在角色目录下按文件名优先级找图 */
+function charFile(name, files, cache) {
   const key = String(name || '').trim()
   if (!key) return ''
-  if (faces.has(key)) return faces.get(key)
+  if (cache.has(key)) return cache.get(key)
 
   let src = ''
   const dir = charDir()
   if (dir) {
-    for (const file of FILES) {
+    for (const file of files) {
       const full = path.join(dir, key, 'imgs', file)
       try {
         if (fs.existsSync(full)) {
@@ -81,8 +83,23 @@ export function faceOf(name) {
     }
   }
 
-  faces.set(key, src)
+  cache.set(key, src)
   return src
+}
+
+/** 本地角色头像（file:// 地址），找不到返回空串 */
+export function faceOf(name) {
+  return charFile(name, FILES, faces)
+}
+
+/** 竖版立绘：抽卡结果卡里的角色条 */
+export function gachaArtOf(name) {
+  return charFile(name, ['gacha.webp', 'gacha.png', 'banner.webp', 'banner.png'], gachaArts)
+}
+
+/** 全屏立绘：单抽五星的大图 */
+export function splashOf(name) {
+  return charFile(name, ['splash.webp', 'splash2.webp', 'splash.png', 'gacha.webp'], splashes)
 }
 
 const weapons = new Map()
