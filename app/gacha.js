@@ -5,9 +5,10 @@ import { POOL_INIT, isWeaponPool, rollMany, upNames } from '../model/wish/gacha.
 import { flush, getPlayer, poolState, pushRecord, pushStar5, touch } from '../model/wish/store.js'
 import { buildCardData, parseArgs, pityText, poolLabel, textResult, today } from '../model/wish/format.js'
 import { TPL_WISH, renderFailBrief, renderTo } from '../model/render.js'
-import { sendImage, recallLater } from '../model/send.js'
+import { sendImages, recallLater } from '../model/send.js'
 import { log } from '../model/log.js'
 import { PLUGIN_NAME } from '../model/version.js'
+import { gameUidOf } from '../model/wish/uid.js'
 
 /**
  * 模拟抽卡
@@ -128,10 +129,11 @@ export class genshinGacha extends plugin {
     const ctx = {
       head: poolLabel(poolId, banner),
       title: POOLS[poolId]?.label || '',
-      drawLabel: count >= 100 ? '100 连' : count === 1 ? '单抽' : '抽卡',
+      drawLabel: count === 1 ? '单抽' : count >= 100 ? '百连' : '十连',
       upText: upNames(poolId, banner),
       rangeText: rangeText(banner),
       pity: CONFIG.pityTip ? pityText(poolId, state) : '',
+      uid: await gameUidOf(e.user_id),
       hint: ''
     }
 
@@ -145,9 +147,26 @@ export class genshinGacha extends plugin {
       return true
     }
 
-    const img = await renderTo(TPL_WISH, 'gw-wish', await buildCardData(items, ctx))
-    if (img) {
-      recallLater(e, await sendImage(e, img), recallSec)
+    // 百连按每个十连单独出图，跟十连一样一张一条
+    const pages = []
+    const size = 10
+    const pageCount = Math.ceil(items.length / size)
+    for (let i = 0; i < items.length; i += size) {
+      const part = items.slice(i, i + size)
+      const pageCtx = pageCount > 1 ? { ...ctx, drawLabel: `百连 ${i / size + 1}/${pageCount}` } : ctx
+      const data = await buildCardData(part, pageCtx)
+      // 百连一次要发十张，单张压一点，整条消息不至于过大
+      if (pageCount > 1) data.quality = Math.min(CONFIG.jpegQuality, 80)
+      const one = await renderTo(TPL_WISH, `gw-wish-${i / size + 1}`, data)
+      if (!one) {
+        pages.length = 0
+        break
+      }
+      pages.push(one)
+    }
+
+    if (pages.length) {
+      recallLater(e, await sendImages(e, pages), recallSec)
       return true
     }
     recallLater(e, await e.reply(`${textResult(items, ctx)}\n（${renderFailBrief()}）`), recallSec)

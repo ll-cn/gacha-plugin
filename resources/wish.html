@@ -3,302 +3,366 @@
 <head>
   <meta charset="UTF-8" />
   <style>
+    :root {
+      --shape: polygon(50% 0, 66% 26px, 100% 26px, 100% calc(100% - 40px), 50% 100%, 0 calc(100% - 40px), 0 26px, 34% 26px);
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { zoom: {{cssZoom}}; }
 
     body {
       font-family: "HarmonyOS Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
-      background: #0b101c;
-      color: #e8edf7;
+      background: #0b0a0d;
+      color: #ece3d6;
       -webkit-font-smoothing: antialiased;
     }
 
     #container {
       display: inline-block;
-      min-width: 380px;
-      padding: 30px 32px 22px;
+      min-width: 420px;
+      padding: 20px 26px 14px;
       background:
-        radial-gradient(ellipse 720px 420px at 8% -10%, rgba(120, 92, 220, .34) 0%, rgba(120, 92, 220, 0) 62%),
-        radial-gradient(ellipse 720px 420px at 96% -4%, rgba(64, 156, 214, .28) 0%, rgba(64, 156, 214, 0) 62%),
-        radial-gradient(ellipse 900px 460px at 50% 118%, rgba(212, 168, 96, .16) 0%, rgba(212, 168, 96, 0) 66%),
-        linear-gradient(168deg, #131a2c 0%, #0d1322 58%, #101728 100%);
+        radial-gradient(ellipse 780px 420px at 50% 12%, rgba(255, 176, 82, .13) 0%, rgba(255, 176, 82, 0) 72%),
+        radial-gradient(ellipse 620px 380px at 50% 92%, rgba(120, 58, 24, .32) 0%, rgba(120, 58, 24, 0) 72%),
+        linear-gradient(180deg, #1d1712 0%, #16110d 54%, #0b0908 100%);
     }
 
     /* ---------------- 顶部 ---------------- */
-    .head {
+    .bar {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 22px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(255, 255, 255, .09);
-    }
-    .head .title {
-      font-size: 26px;
-      font-weight: 500;
-      letter-spacing: .5px;
-      color: #f3f6ff;
-    }
-    .head .title .pool { color: #ffd27a; }
-    .head .sub {
-      margin-top: 9px;
-      font-size: 14px;
-      color: #93a0ba;
-      letter-spacing: .2px;
-    }
-    .head .sub .hl { color: #cbb7ff; }
-    .head .right { text-align: right; flex: none; }
-    .head .pity {
-      font-size: 15px;
-      color: #ffd27a;
+      gap: 18px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      color: #9d8b76;
       letter-spacing: .3px;
     }
-    .head .path {
-      margin-top: 8px;
-      font-size: 13px;
-      color: #7c88a3;
-    }
+    .bar .pool { color: #ffd27a; font-weight: 600; font-size: 14px; }
+    .bar .up { margin-left: 12px; font-size: 12px; color: #bfa887; }
+    .bar .right { flex: none; color: #d9b77c; }
 
-    /* ---------------- 卡片区 ---------------- */
+    /* ---------------- 抽卡卡条 ---------------- */
     .grid {
+      --cw: 120px;
+      --ch: 312px;
       display: flex;
       justify-content: center;
-      gap: 10px;
+      align-items: flex-end;
+      gap: 9px;
     }
-
-    /* 百连：固定 10 列换行排布（10 × 124 + 9 × 10 = 1330） */
     .grid.many {
-      flex-wrap: wrap;
-      width: 1330px;
-      align-content: flex-start;
+      --cw: 96px;
+      --ch: 250px;
+      gap: 7px;
     }
+    .grid + .grid { margin-top: 20px; }
+    .splash + .grid { margin-top: 20px; }
+    .grid.many + .grid.many { margin-top: 14px; }
 
-    .card {
+    .slot {
       position: relative;
-      width: 124px;
-      height: 236px;
-      border-radius: 14px;
-      overflow: hidden;
-      background: linear-gradient(180deg, #2c3452 0%, #161c2c 100%);
-      border: 1px solid rgba(255, 255, 255, .1);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07), 0 4px 12px rgba(0, 0, 0, .28);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .card .art {
-      position: relative;
-      height: 144px;
+      width: var(--cw);
+      height: var(--ch);
       flex: none;
+      filter: drop-shadow(0 0 10px var(--glow));
+    }
+    .slot.r3 { --glow: rgba(96, 158, 216, .62); --trim: linear-gradient(180deg, #cfe4f6, #5c8cb8); --bg: linear-gradient(180deg, #dceafa 0%, #b2cbe2 46%, #8fb0c9 100%); }
+    .slot.r4 { --glow: rgba(176, 118, 255, .72); --trim: linear-gradient(180deg, #e6d5ff, #7d4fc2); --bg: linear-gradient(180deg, #f0e5ff 0%, #bd9cea 46%, #8458c6 100%); }
+    .slot.r5 { --glow: rgba(255, 176, 62, .92); --trim: linear-gradient(180deg, #fff0c0, #c07f1c); --bg: linear-gradient(180deg, #fff4cd 0%, #f0c471 46%, #c4872a 100%); }
+
+    .frame {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 2px;
+      background: var(--trim);
+      clip-path: var(--shape);
+    }
+
+    .tag {
+      position: relative;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background:
-        radial-gradient(circle at 50% 40%, rgba(255, 255, 255, .14) 0%, rgba(255, 255, 255, 0) 68%);
+      font-size: calc(var(--cw) / 11.5);
+      background: var(--bg);
+      clip-path: var(--shape);
     }
-    .card .art img {
-      width: 104px;
-      height: 104px;
-      border-radius: 50%;
-      object-fit: cover;
-      object-position: top center;
-      border: 2px solid rgba(255, 255, 255, .18);
-      box-shadow: 0 0 0 3px rgba(255, 255, 255, .06), 0 8px 18px rgba(0, 0, 0, .5);
-    }
-    /* 本地图库头像是透明底的脸图，补一层底衬免得看着发飘 */
-    .card .art img.local {
-      background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, .22) 0%, rgba(255, 255, 255, .04) 70%);
-    }
-    .card .art .fallback {
-      width: 104px;
-      height: 104px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, .08);
-      border: 2px solid rgba(255, 255, 255, .18);
-      font-size: 38px;
-      color: rgba(255, 255, 255, .6);
-      font-weight: 500;
-    }
-
-    /* 武器：图标本身就是完整图形，保持方形不裁圆 */
-    .card.weapon .art .fallback { border-radius: 20px; }
-
-    .card .meta {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 4px 6px 12px;
-      text-align: center;
-      background: linear-gradient(180deg, rgba(8, 12, 22, 0) 0%, rgba(8, 12, 22, .55) 34%, rgba(8, 12, 22, .92) 100%);
-    }
-    .card .name {
-      font-size: 14px;
-      font-weight: 600;
-      color: #eaf0fc;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      letter-spacing: .2px;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, .6);
-    }
-    .card .stars {
-      margin-top: 6px;
-      font-size: 10px;
-      letter-spacing: .6px;
-    }
-
-    /* 三星 */
-    .card.r3 { border-color: rgba(110, 160, 220, .34); }
-    .card.r3 .stars { color: #7fb4e8; }
-    .card.r3 .art img { border-color: rgba(127, 180, 232, .55); box-shadow: 0 0 0 3px rgba(110, 160, 220, .1), 0 8px 18px rgba(0, 0, 0, .45); }
-
-    /* 四星 */
-    .card.r4 {
-      border-color: rgba(176, 132, 255, .58);
-      background: linear-gradient(180deg, #3d3169 0%, #1c172f 100%);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1), 0 6px 20px rgba(120, 80, 220, .22);
-    }
-    .card.r4 .stars { color: #c9a0ff; }
-    .card.r4 .art img {
-      border-color: rgba(201, 160, 255, .74);
-      box-shadow: 0 0 0 3px rgba(154, 108, 255, .18), 0 0 20px rgba(154, 108, 255, .42);
-    }
-
-    /* 五星 */
-    .card.r5 {
-      border-color: rgba(255, 205, 112, .85);
-      background: linear-gradient(180deg, #64491f 0%, #291e0f 100%);
-      box-shadow: inset 0 1px 0 rgba(255, 236, 190, .16), 0 0 0 1px rgba(255, 222, 150, .32), 0 10px 28px rgba(255, 178, 56, .3);
-    }
-    .card.r5 .stars { color: #ffd27a; }
-    .card.r5 .name { color: #ffeec6; font-size: 15px; letter-spacing: .5px; }
-    .card.r5 .art img {
-      border-color: rgba(255, 214, 132, .95);
-      box-shadow: 0 0 0 3px rgba(255, 205, 112, .24), 0 0 26px rgba(255, 196, 92, .65);
-    }
-    .card.r5 .art::after {
+    /* 卡面顶部的一点星光 */
+    .tag::after {
       content: '';
       position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 50% 40%, rgba(255, 208, 122, .26) 0%, rgba(255, 208, 122, 0) 64%);
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 34%;
+      background: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, .55) 0%, rgba(255, 255, 255, 0) 68%);
       pointer-events: none;
     }
 
-    /* 武器：图标本身是完整图形，不裁圆，保留方形（覆盖上面各星级的圆框） */
-    .card.weapon .art img {
-      width: 116px;
-      height: 116px;
-      border-radius: 0;
+    .tag .art {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 16%;
+    }
+    /* 武器是透明图标，留白居中 */
+    .slot.weapon .tag .art {
+      left: 8%;
+      top: 12%;
+      width: 84%;
+      height: 64%;
       object-fit: contain;
-      border: none;
-      box-shadow: none;
-      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, .55));
+      object-position: 50% 50%;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, .35));
+    }
+    .tag .art.fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6em;
+      color: rgba(0, 0, 0, .34);
+      font-weight: 600;
     }
 
-    .card .badge {
+    .tag .scrim {
       position: absolute;
-      top: 7px;
-      left: 7px;
-      padding: 2px 6px;
-      font-size: 9px;
-      line-height: 1.55;
-      border-radius: 3px;
-      background: linear-gradient(135deg, #ffd98a, #e8a33c);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 40%;
+      background: linear-gradient(180deg, rgba(10, 8, 6, 0) 0%, rgba(10, 8, 6, .42) 52%, rgba(10, 8, 6, .78) 100%);
+    }
+    .slot.weapon .tag .scrim { display: none; }
+
+    .tag .bottom {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 5%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .34em;
+      z-index: 2;
+    }
+    .emblem {
+      width: 1.5em;
+      height: 1.5em;
+      background: linear-gradient(180deg, #fffbe8, #d8ad57);
+      clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+      filter: drop-shadow(0 0 5px rgba(255, 196, 96, .85));
+    }
+    .stars {
+      font-size: 1em;
+      letter-spacing: .1em;
+      color: #ffd977;
+      text-shadow: 0 1px 2px rgba(88, 52, 4, .8), 0 0 6px rgba(255, 190, 90, .55);
+    }
+    .slot.r5 .stars { color: #ffe9a8; }
+
+    /* 五星：第几抽 */
+    .pity {
+      position: absolute;
+      left: 50%;
+      top: 11%;
+      transform: translateX(-50%);
+      padding: .08em .5em;
+      border-radius: 1em;
+      font-size: .72em;
+      letter-spacing: .05em;
+      color: #ffe2a6;
+      background: rgba(22, 14, 6, .62);
+      border: 1px solid rgba(255, 208, 128, .5);
+      z-index: 3;
+      white-space: nowrap;
+    }
+
+    /* UP 折角 */
+    .up {
+      position: absolute;
+      top: 9%;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-top: 1.7em solid #ffd071;
+      border-left: 1.7em solid transparent;
+      filter: drop-shadow(0 0 6px rgba(255, 190, 90, .8));
+      z-index: 3;
+    }
+
+    /* ---------------- 单抽（无立绘） ---------------- */
+    .grid.single { --cw: 280px; --ch: 560px; }
+    .grid.single .slot .stars { font-size: 1.1em; }
+    .grid.single .tag .bottom { bottom: 6%; gap: .5em; }
+    .grid.single .emblem { width: 1.8em; height: 1.8em; }
+
+    /* ---------------- 五星登场 ---------------- */
+    .splash {
+      position: relative;
+      width: 100%;
+      height: 520px;
+      margin-top: 20px;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 42% 42%, rgba(255, 178, 70, .22) 0%, rgba(255, 178, 70, 0) 68%);
+    }
+    .splash + .splash { margin-top: 16px; }
+    .splash .art {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 18%;
+      filter: drop-shadow(0 0 30px rgba(255, 178, 70, .28));
+    }
+    .splash .veil {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 56%;
+      background: linear-gradient(180deg, rgba(10, 8, 6, 0) 0%, rgba(10, 8, 6, .72) 62%, rgba(10, 8, 6, .92) 100%);
+    }
+    .splash .info {
+      position: absolute;
+      left: 26px;
+      bottom: 24px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .splash .el {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-size: 17px;
+      line-height: 34px;
+      text-align: center;
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 0 16px rgba(0, 0, 0, .5);
+    }
+    .splash .nm {
+      font-size: 38px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 4px;
+      text-shadow: 0 2px 18px rgba(0, 0, 0, .9);
+    }
+    .splash .stars {
+      margin-top: 4px;
+      font-size: 20px;
+      letter-spacing: 6px;
+      color: #ffd27a;
+    }
+    .splash .tagup {
+      display: inline-block;
+      margin-left: 12px;
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1px;
       color: #3a2606;
-      letter-spacing: .6px;
-      box-shadow: 0 2px 8px rgba(232, 163, 60, .45);
-      z-index: 2;
+      background: linear-gradient(135deg, #ffe3a6, #dfa03c);
+      vertical-align: middle;
     }
-    .card .pitytag {
-      position: absolute;
-      top: 7px;
-      right: 7px;
-      padding: 2px 6px;
-      font-size: 9px;
-      line-height: 1.55;
-      border-radius: 3px;
-      background: rgba(6, 10, 18, .82);
-      border: 1px solid rgba(255, 214, 130, .5);
-      color: #ffd88f;
-      z-index: 2;
-    }
-
-    /* 单抽放大 */
-    .grid.single .card { width: 248px; height: 392px; border-radius: 18px; }
-    .grid.single .card .art { height: 240px; }
-    .grid.single .card .art img { width: 178px; height: 178px; border-width: 3px; }
-    .grid.single .card .art .fallback { width: 178px; height: 178px; font-size: 62px; }
-    .grid.single .card .name { font-size: 22px; }
-    .grid.single .card .stars { font-size: 15px; margin-top: 9px; }
-    .grid.single .card .meta { padding: 10px 10px 26px; justify-content: flex-end; }
-    .grid.single .card .badge { font-size: 13px; padding: 3px 10px; }
-    .grid.single .card .pitytag { font-size: 13px; padding: 3px 9px; }
 
     /* ---------------- 底部 ---------------- */
     .foot {
-      margin-top: 20px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255, 255, 255, .08);
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 214, 160, .12);
       display: flex;
       flex-wrap: wrap;
-      gap: 6px 20px;
+      gap: 4px 18px;
       justify-content: space-between;
       align-items: center;
-      font-size: 12px;
-      color: #6f7b95;
+      font-size: 11.5px;
+      color: #7d6a55;
       letter-spacing: .2px;
     }
-    .foot > div { flex: none; }
-    .grid.single ~ .foot { flex-direction: column; align-items: flex-start; gap: 6px; }
-    .foot .ver { color: #9fb0cd; }
-    .foot .dot { color: #4a5570; }
+    .foot .right { display: flex; align-items: center; gap: 16px; }
+    .foot .uid { color: #a08a6d; font-size: 12px; letter-spacing: .5px; }
+    .foot .ver { color: #a48d6f; }
   </style>
 </head>
 <body>
   <div id="container">
-    <div class="head">
+    <div class="bar">
       <div class="left">
-        <div class="title"><span class="pool">{{poolLabel}}</span> · {{drawLabel || '抽卡'}}</div>
-        <div class="sub">
-          {{if upText}}UP：<span class="hl">{{upText}}</span>{{/if}}
-          {{if rangeText}}<span class="hl"> ｜ </span>{{rangeText}}{{/if}}
-        </div>
+        <span class="pool">{{poolLabel}}</span>{{if drawLabel}} · {{drawLabel}}{{/if}}{{if upText}}<span class="up">{{upText}}</span>{{/if}}
       </div>
-      <div class="right">
-        {{if pity}}<div class="pity">{{pity}}</div>{{/if}}
-        <div class="path">{{title}}</div>
-      </div>
+      <div class="right">{{if pity}}{{pity}}{{/if}}</div>
     </div>
 
-    <div class="grid {{if items.length === 1}}single{{else if items.length > 10}}many{{/if}}">
-      {{each items item}}
-      <div class="card r{{item.rank}}{{if !item.element}} weapon{{/if}}">
-        <div class="art">
-          {{if item.src}}
-            <img class="{{if item.local}}local{{/if}}" src="{{item.src}}" alt="{{item.name}}" />
-          {{else}}
-            <div class="fallback">{{item.name.slice(0, 1)}}</div>
-          {{/if}}
-        </div>
-        {{if item.isUp}}<div class="badge">UP</div>{{/if}}
-        {{if item.pity}}<div class="pitytag">{{item.pity}} 抽</div>{{/if}}
-        <div class="meta">
-          <div class="name">{{item.name}}</div>
-          <div class="stars">{{item.star}}</div>
+    {{if single && single.splash}}
+    <div class="splash" style="height:600px">
+      <img class="art" src="{{single.splash}}" alt="{{single.name}}" />
+      <div class="veil"></div>
+      <div class="info">
+        {{if single.elColor}}<span class="el" style="background:{{single.elColor}}">{{single.element}}</span>{{/if}}
+        <div>
+          <div class="nm">{{single.name}}{{if single.isUp}}<span class="tagup">UP</span>{{/if}}</div>
+          <div class="stars">{{single.star}}</div>
         </div>
       </div>
+    </div>
+    {{else}}
+    <div class="decks">
+      {{each rows row}}
+      <div class="grid{{if total > 10}} many{{/if}}{{if total === 1}} single{{/if}}">
+        {{each row.items item}}
+        <div class="slot r{{item.rank}}{{if !item.element}} weapon{{/if}}">
+          <div class="frame">
+            <div class="tag">
+              {{if item.src}}
+                <img class="art" src="{{item.src}}" alt="{{item.name}}" />
+              {{else}}
+                <div class="art fallback">{{item.name.slice(0, 1)}}</div>
+              {{/if}}
+              <div class="scrim"></div>
+              {{if item.pity}}<div class="pity">{{item.pity}} 抽</div>{{/if}}
+              <div class="bottom">
+                <span class="emblem"></span>
+                <span class="stars">{{item.star}}</span>
+              </div>
+            </div>
+            {{if item.isUp}}<div class="up"></div>{{/if}}
+          </div>
+        </div>
+        {{/each}}
+      </div>
+
+      {{if row.splash}}
+      <div class="splash">
+        <img class="art" src="{{row.splash.splash}}" alt="{{row.splash.name}}" />
+        <div class="veil"></div>
+        <div class="info">
+          {{if row.splash.elColor}}<span class="el" style="background:{{row.splash.elColor}}">{{row.splash.element}}</span>{{/if}}
+          <div>
+            <div class="nm">{{row.splash.name}}{{if row.splash.isUp}}<span class="tagup">UP</span>{{/if}}</div>
+            <div class="stars">{{row.splash.star}}</div>
+          </div>
+        </div>
+      </div>
+      {{/if}}
       {{/each}}
     </div>
+    {{/if}}
 
     <div class="foot">
       <div>模拟抽卡 · 结果仅供娱乐，不代表真实概率</div>
-      <div>{{@versionHtml}}</div>
+      <div class="right">
+        {{if uid}}<span class="uid">UID: {{uid}}</span>{{/if}}
+        <span class="ver">{{@versionHtml}}</span>
+      </div>
     </div>
   </div>
 </body>
